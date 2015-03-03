@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		html, body
+		{
+			margin: 0;
+			width:100%;
+			height:100%;
+			background-color: black;
+		}
+		.vryspooky
+		{
+			position: relative;
+			display: block;
+			width: 100px;
+			height: 100px;
+			background-size: 100% 100%;
+		}
+		.spookybox
+		{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		#dancing
+		{
+			position: relative;
+			width: 68%;
+			height: 100%;
+			margin-left: 16%;
+			margin-right: 16%;
+			background-image: url("images/Dancing.gif");
+		}
+		#scary
+		{
+			height: 96%;
+			width: 40%;
+			top: 2%;
+			margin-left: auto;
+			margin-right: auto;
+			background-image: url("images/scary.gif");
+		}
+		.walking
+		{
+			width: 35%;
+			height: 85%;
+			top: 10%;
+			background-image: url("images/walking.gif");
+		}
+		#walking1
+		{
+			left: 0%;
+		}
+		#walking2
+		{
+			left: 100%;
+		}
+		#spooky
+		{
+			height: 90%;
+			width: 60%;
+			top: 0%;
+			margin-left: auto;
+			margin-right: auto;
+			background-image: url("images/spooky.gif");
+		}
+		.lefttrumpet
+		{
+			width: 16%;
+			height: 20%;
+			left: 0%;
+			background-image: url("images/trumpet.gif");
+		}
+		.righttrumpet
+		{
+			width: 16%;
+			height: 20%;
+			margin-left: auto;
+			background-image: url("images/trumpet.gif");
+		}
+		#lefttrumpet1
+		{
+			top: 0%;
+		}
+		#lefttrumpet2
+		{
+			top: 50%;
+		}
+		#righttrumpet1
+		{
+			top: 25%;
+		}
+		#righttrumpet2
+		{
+			top: 75%;
+		}
+		.spookytext
+		{
+			position: relative;
+			display: block;
+			font-size: 2em;
+			font-family: "Comic Sans MS" sans-serif;
+		}
+	</style>
+	<script>
+		var walking1;
+		var walking2;
+		var walkingProgress = 0;
+
+		var trumpetPhase = false;
+
+		var lefttrumpet1;
+		var lefttrumpet2;
+		var righttrumpet1;
+		var righttrumpet2;
+
+		var spookytextbox;
+
+		function walkingMove()
+		{
+			walkingProgress += 1;
+			if(walkingProgress>=100)
+			{
+				walkingProgress -= 100;
+			}
+			var walking1Val = 0 - walkingProgress;
+			var walking2Val = 100 - walkingProgress;
+			walking1.style.left = walking1Val + "%";
+			walking2.style.left = walking2Val + "%";
+		}
+
+		function trumpetMove()
+		{
+			if(trumpetPhase)
+			{
+				trumpetPhase = false;
+				lefttrumpet1.style.top = "0%";
+				lefttrumpet2.style.top = "50%";
+				righttrumpet1.style.top = "25%";
+				righttrumpet2.style.top = "75%";
+			}
+			else
+			{
+				trumpetPhase = true;
+				lefttrumpet1.style.top = "25%";
+				lefttrumpet2.style.top = "75%";
+				righttrumpet1.style.top = "0%";
+				righttrumpet2.style.top = "50%";
+			}
+		}
+
+		function createSpookyText(x,y,r,g,b,text)
+		{
+			var spookybox = document.createElement("div");
+			spookybox.className = "spookybox";
+			var spookytext = document.createElement("div");
+			spookytext.className = "spookytext";
+			spookytext.innerHTML = text;
+			spookytext.style.color = "rgb(" + r + "," + g + "," + b + ")";
+			spookytext.style.left = x;
+			spookytext.style.top = y;
+			spookybox.appendChild(spookytext);
+			return spookybox;
+		}
+
+		function createRandomSpookyText()
+		{
+			self.randomText = ["#2SPOOKY4U", "[spookiness intentensifies]", "The Ride Never Ends"];
+
+			var x = (Math.random()*100) + "%";
+			var y = (Math.random()*100) + "%";
+			var r = Math.floor(Math.random()*256);
+			var g = Math.floor(Math.random()*256);
+			var b = Math.floor(Math.random()*256);
+			var text = self.randomText[Math.floor(Math.random()*self.randomText.length)];
+
+			return createSpookyText(x,y,r,g,b,text);
+		}
+
+		function spookytextUpdate()
+		{
+			spookytextbox.innerHTML = "";
+			for(var i=0; i<30; i++)
+			{
+				spookytextbox.appendChild(createRandomSpookyText());
+			}
+		}
+
+		function main()
+		{
+			walking1 = document.getElementById("walking1");
+			walking2 = document.getElementById("walking2");
+			window.setInterval(walkingMove, 33);
+			lefttrumpet1 = document.getElementById("lefttrumpet1");
+			lefttrumpet2 = document.getElementById("lefttrumpet2");
+			righttrumpet1 = document.getElementById("righttrumpet1");
+			righttrumpet2 = document.getElementById("righttrumpet2");
+			window.setInterval(trumpetMove, 1000);
+			spookytextbox = document.getElementById("spookytextbox");
+			window.setInterval(spookytextUpdate, 33);
+		}
+
+		document.onreadystatechange = function(evt)
+		{
+			if (document.readyState === 'complete')
+			{
+				main();
+			}
+		}
+	</script>
+</head>
+<body>
+	<audio src="audio/spoopy.wav" autoplay="autoplay" loop="loop"></audio>
+	<div class="spookybox">
+		<div class="vryspooky" id="dancing"></div>
+	</div>
+	<div class="spookybox">
+		<div class="spookybox" id="spookytextbox">
+			<!--
+			<div class="spookybox">
+				<div class="spookytext"></div>
+			</div>
+			-->
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky lefttrumpet" id="lefttrumpet1"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky lefttrumpet" id="lefttrumpet2"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky righttrumpet" id="righttrumpet1"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky righttrumpet" id="righttrumpet2"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky" id="spooky"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky" id="scary"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky walking" id="walking1"></div>
+		</div>
+		<div class="spookybox">
+			<div class="vryspooky walking" id="walking2"></div>
+		</div>
+	</div>
+</body>
+</html>
